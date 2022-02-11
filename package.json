@@ -1,0 +1,18 @@
+{
+  "name": "dinobrowse",
+  "version": "1.0.0",
+  "description": "A browser made of Node and Python",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "keywords": [
+    "dinobrowser"
+  ],
+  "author": "Arjun J",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^17.0.0"
+  }
+}
