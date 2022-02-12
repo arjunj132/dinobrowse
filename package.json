@@ -14,5 +14,9 @@
   "license": "MIT",
   "devDependencies": {
     "electron": "^17.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arjunj132/dinobrowse.git"
   }
 }
