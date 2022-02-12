@@ -1,5 +1,5 @@
 {
-  "name": "dinobrowse",
+  "name": "@arjunj132/dinobrowse",
   "version": "1.0.0",
   "description": "A browser made of Node and Python",
   "main": "main.js",
@@ -14,11 +14,5 @@
   "license": "MIT",
   "devDependencies": {
     "electron": "^17.0.0"
-  },
-  "repository":{
-    "url":"https://github.com/arjunj132/dinobrowse.git"
-  },
-  "publishConfig": {
-    "registry":"https://npm.pkg.github.com/@arjunj132"
   }
 }
