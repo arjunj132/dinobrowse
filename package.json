@@ -1,5 +1,5 @@
 {
-  "name": "@arjunj132/dinobrowse",
+  "name": "dinobrowse",
   "version": "1.0.0",
   "description": "A browser made of Node and Python",
   "main": "main.js",
