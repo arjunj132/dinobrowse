@@ -1,5 +1,5 @@
 /*
-This holds the source code for DinoBrowse, a hack-the-page-with-JS-as-soon-as-it-starts-up browser.
+This holds the source code for DinoBrowse, node browser.
 
 Created with ElectronJS.
 
@@ -34,8 +34,7 @@ SOFTWARE.
 url = process.argv[2];
 hacks = process.argv[3];
 
-
-const { app, BrowserWindow, Menu } = require('electron')
+const { app, BrowserWindow, Menu, MenuItem } = require('electron')
 const readline = require('readline').createInterface({
   input: process.stdin,
   output: process.stdout
@@ -48,6 +47,7 @@ function http_check() {
 		raw = raw2[2];
   }
   else {
+    if (url.includes('file:///')) {raw = url;} else {
     raw = url;
     if (url.includes("/") == true) {
       raw1 = raw;
@@ -56,7 +56,7 @@ function http_check() {
     }
 		url = 'http://' + url;
 
-  }
+  }}
 }
 
 
@@ -76,7 +76,12 @@ function isValidHttpUrl(string) {
 function createWindow () {
   const win = new BrowserWindow({
     width: 800,
-    height: 600
+    height: 600,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true
+    }
   })
 
 // checks:
@@ -89,7 +94,158 @@ function createWindow () {
       win.loadURL(url)
       // run hacks
       const contents = win.webContents
-     contents.executeJavaScript(hacks, true)
+      contents.executeJavaScript(hacks, true)
+      // menu code below taken from https://www.electronjs.org/docs/latest/api/menu
+      const isMac = process.platform === 'darwin'
+
+      const template = [
+        // { role: 'appMenu' }
+        ...(isMac ? [{
+          label: app.name,
+          submenu: [
+            { role: 'about' },
+            { type: 'separator' },
+            { role: 'services' },
+            { type: 'separator' },
+            { role: 'hide' },
+            { role: 'hideOthers' },
+            { role: 'unhide' },
+            { type: 'separator' },
+            { role: 'quit' }
+          ]
+        }] : []),
+        // { role: 'fileMenu' }
+        {
+          label: 'File',
+          submenu: [
+            isMac ? { role: 'close' } : { role: 'quit' }
+          ]
+        },
+        // { role: 'editMenu' }
+        {
+          label: 'Edit',
+          submenu: [
+            { role: 'undo' },
+            { role: 'redo' },
+            { type: 'separator' },
+            { role: 'cut' },
+            { role: 'copy' },
+            { role: 'paste' },
+            ...(isMac ? [
+              { role: 'pasteAndMatchStyle' },
+              { role: 'delete' },
+              { role: 'selectAll' },
+              { type: 'separator' },
+              {
+                label: 'Speech',
+                submenu: [
+                  { role: 'startSpeaking' },
+                  { role: 'stopSpeaking' }
+                ]
+              }
+            ] : [
+              { role: 'delete' },
+              { type: 'separator' },
+              { role: 'selectAll' }
+            ])
+          ]
+        },
+        // { role: 'viewMenu' }
+        {
+          label: 'View',
+          submenu: [
+            { role: 'reload' },
+            { role: 'forceReload' },
+            { role: 'toggleDevTools' },
+            { type: 'separator' },
+            { role: 'resetZoom' },
+            { role: 'zoomIn' },
+            { role: 'zoomOut' },
+            { type: 'separator' },
+            { role: 'togglefullscreen' }
+          ]
+        },
+        // { role: 'windowMenu' }
+        {
+          label: 'Window',
+          submenu: [
+            { role: 'minimize' },
+            { role: 'zoom' },
+            ...(isMac ? [
+              { type: 'separator' },
+              { role: 'front' },
+              { type: 'separator' },
+              { role: 'window' }
+            ] : [
+              { role: 'close' }
+            ])
+          ]
+        }
+      ]
+
+      const menu1 = Menu.buildFromTemplate(template)
+      Menu.setApplicationMenu(menu1)
+
+
+      const ctxMenu = new Menu()
+      ctxMenu.append(new MenuItem({
+        label: 'Inspect',
+        click: function() {
+            contents.toggleDevTools()
+        }
+      }))
+      ctxMenu.append(new MenuItem({
+        label: 'Back',
+        click: () => {
+          contents.executeJavaScript(`
+window.history.back()
+            `, true)
+        }
+      }))
+      ctxMenu.append(new MenuItem({
+        label: 'Forward',
+        click: () => {
+          contents.executeJavaScript(`
+window.history.forward()
+            `, true)
+        }
+      }))
+      ctxMenu.append(new MenuItem({
+        label: 'Copy',
+        click: () => {
+          contents.executeJavaScript(`
+            function updateClipboard(newClip) {
+              navigator.clipboard.writeText(newClip).then(function() {
+              }, function() {
+                console.error('DinoBrowse: Failed to update clipboard')
+              });
+            }
+
+            updateClipboard(window.getSelection().toString())
+            `)
+        }
+      }))
+      ctxMenu.append(new MenuItem({
+        label: 'Paste',
+        click: () => {
+          contents.executeJavaScript(`
+            navigator.clipboard.readText().then(clipText =>
+                document.activeElement.value = clipText
+            )
+            `)
+        }
+      }))
+      ctxMenu.append(new MenuItem({
+        label: 'Reload',
+        click: () => {
+          contents.executeJavaScript(`
+            window.location.reload();
+            `)
+        }
+      }))
+      win.webContents.on('context-menu', function(e, params) {
+        ctxMenu.popup(win, params.x, params.y)
+      })
     } else {
       console.log('DINOBROWSE: ERROR: URL is not valid');
       win.loadFile('err.html')
@@ -118,95 +274,3 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
-
-
-// menu code below taken from https://www.electronjs.org/docs/latest/api/menu
-const isMac = process.platform === 'darwin'
-
-const template = [
-  // { role: 'appMenu' }
-  ...(isMac ? [{
-    label: app.name,
-    submenu: [
-      { role: 'about' },
-      { type: 'separator' },
-      { role: 'services' },
-      { type: 'separator' },
-      { role: 'hide' },
-      { role: 'hideOthers' },
-      { role: 'unhide' },
-      { type: 'separator' },
-      { role: 'quit' }
-    ]
-  }] : []),
-  // { role: 'fileMenu' }
-  {
-    label: 'File',
-    submenu: [
-      isMac ? { role: 'close' } : { role: 'quit' }
-    ]
-  },
-  // { role: 'editMenu' }
-  {
-    label: 'Edit',
-    submenu: [
-      { role: 'undo' },
-      { role: 'redo' },
-      { type: 'separator' },
-      { role: 'cut' },
-      { role: 'copy' },
-      { role: 'paste' },
-      ...(isMac ? [
-        { role: 'pasteAndMatchStyle' },
-        { role: 'delete' },
-        { role: 'selectAll' },
-        { type: 'separator' },
-        {
-          label: 'Speech',
-          submenu: [
-            { role: 'startSpeaking' },
-            { role: 'stopSpeaking' }
-          ]
-        }
-      ] : [
-        { role: 'delete' },
-        { type: 'separator' },
-        { role: 'selectAll' }
-      ])
-    ]
-  },
-  // { role: 'viewMenu' }
-  {
-    label: 'View',
-    submenu: [
-      { role: 'reload' },
-      { role: 'forceReload' },
-      { role: 'toggleDevTools' },
-      { type: 'separator' },
-      { role: 'resetZoom' },
-      { role: 'zoomIn' },
-      { role: 'zoomOut' },
-      { type: 'separator' },
-      { role: 'togglefullscreen' }
-    ]
-  },
-  // { role: 'windowMenu' }
-  {
-    label: 'Window',
-    submenu: [
-      { role: 'minimize' },
-      { role: 'zoom' },
-      ...(isMac ? [
-        { type: 'separator' },
-        { role: 'front' },
-        { type: 'separator' },
-        { role: 'window' }
-      ] : [
-        { role: 'close' }
-      ])
-    ]
-  }
-]
-
-const menu = Menu.buildFromTemplate(template)
-Menu.setApplicationMenu(menu)
