@@ -1,6 +1,6 @@
 # DinoBrowse
 
-## v1.0.0
+## v1.0.2
 
 You know what would be fun? Being able to browse the web BUT as soon as the page loads you hack it with JavaScript.
 
@@ -9,8 +9,8 @@ Hmm... Let's try that! I created a electron-based simple browser with Node. So y
 Make sure you clone this repo and cd:
 
 ```bash
-git clone https://github.com/arjunj132/DinoBrowse.git
-cd DinoBrowse
+git clone https://github.com/arjunj132/dinobrowse.git
+cd dinobrowse
 ```
 
 
