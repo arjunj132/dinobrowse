@@ -9,8 +9,8 @@ Hmm... Let's try that! I created a electron-based simple browser with Node. So y
 Make sure you clone this repo and cd:
 
 ```bash
-git clone https://github.com/arjunj132/DinoBrowse.git
-cd DinoBrowse
+git clone https://github.com/arjunj132/dinobrowse.git
+cd dinobrowse
 ```
 
 
