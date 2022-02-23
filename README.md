@@ -1,6 +1,6 @@
 # DinoBrowse
 
-## v1.0.0
+## v1.0.2
 
 You know what would be fun? Being able to browse the web BUT as soon as the page loads you hack it with JavaScript.
 

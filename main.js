@@ -47,7 +47,7 @@ function http_check() {
 		raw = raw2[2];
   }
   else {
-    if (url.includes('file:///')) {raw = url;} else {
+    if (url.includes("file:///") == true) { raw = url.split('file:///')[1]; } else {
     raw = url;
     if (url.includes("/") == true) {
       raw1 = raw;
@@ -60,17 +60,21 @@ function http_check() {
 }
 
 
-// The isValidHttpUrl function is taken from https://sstackoverflow.com/a/43467144/17245189
+// The isValidHttpUrl function is taken from https://stackoverflow.com/a/43467144/17245189
 function isValidHttpUrl(string) {
-  let url;
+  let url1;
 
   try {
-    url = new URL(string);
+    url1 = new URL(string);
   } catch (_) {
     return false;
   }
 
-  return url.protocol === "http:" || url.protocol === "https:";
+  if (url.includes('file:///')) {
+    file1 = url;
+    url = raw;
+  }
+  return url1.protocol === "http:" || url1.protocol === "https:" || file1.includes("file:///");
 }
 
 function createWindow () {
@@ -243,9 +247,46 @@ window.history.forward()
             `)
         }
       }))
+      ctxMenu.append(new MenuItem({
+        label: 'Change URL',
+        click: () => {
+          const prompt = require('electron-prompt');
+          prompt({
+              title: 'Change URL',
+              label: 'Enter URL to redirect you to here:',
+              value: win.webContents.getURL(),
+              inputAttrs: {
+                  type: 'url'
+              },
+              type: 'input'
+          })
+          .then((r) => {
+              if(r === null) {
+                  console.log('User cancelled operation "Change URL"');
+              } else {
+                  console.log('Process main.js is redirecting to server', r);
+                  win.loadURL(r)
+              }
+          })
+          .catch(console.error);
+        }
+      }))
       win.webContents.on('context-menu', function(e, params) {
         ctxMenu.popup(win, params.x, params.y)
       })
+      ctxMenu.append(new MenuItem({
+        label: 'About Dino',
+        click: () => {
+          const { dialog } = require('electron')
+          dialog.showMessageBox({
+            message: 'v1.0.2 DinoBrowse (Node/Electron/Chromium)\n(c) Arjun J'
+          })
+        }
+      }))
+      win.webContents.on('context-menu', function(e, params) {
+        ctxMenu.popup(win, params.x, params.y)
+      })
+      
     } else {
       console.log('DINOBROWSE: ERROR: URL is not valid');
       win.loadFile('err.html')
