@@ -1,8 +1,8 @@
-# DinoBrowse
+![DinoBrowse](https://i.ibb.co/W2vB7zF/Screenshot-2022-02-25-5-59-50-PM.png)
 
-## v1.0.2
+# DinoBrowse: The Hackable Browser
 
-You know what would be fun? Being able to browse the web BUT as soon as the page loads you hack it with JavaScript.
+## v1.0.3
 
 Hmm... Let's try that! I created a electron-based simple browser with Node. So your life would be much easier. Anyway, lets go ahead and install it!
 
@@ -26,4 +26,27 @@ So now that we installed the dependencies, lets run it! You need python. So, jus
 python3 -m dino
 ```
 
-Type the url, the JS code, and then you are done!
+Type the url, the JS code (optional), and then you are done!
+
+
+
+## Usage
+
+You might notice that there is not a address bar! You control stuff via the top bar or the right click menu. 
+
+## About
+
+This is a modified version of Chromium. But it is super lightweight!
+
+It great because it contains many features:
+
+- Built in Ad Blocker
+- Blocks tracking ads
+- Do Not Track header
+- Remove Referer
+- Mask system information
+
+
+---
+
+`(c) 2022 Arjun J. All Rights Reserved.`

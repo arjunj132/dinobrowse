@@ -34,7 +34,13 @@ SOFTWARE.
 url = process.argv[2];
 hacks = process.argv[3];
 
-const { app, BrowserWindow, Menu, MenuItem } = require('electron')
+const { app, BrowserWindow, Menu, MenuItem, shell } = require('electron')
+const path = require('path')
+
+// Start privacy features:
+const privacy = require('@dothq/electron-privacy');
+
+
 const readline = require('readline').createInterface({
   input: process.stdin,
   output: process.stdout
@@ -271,6 +277,33 @@ window.history.forward()
           .catch(console.error);
         }
       }))
+      ctxMenu.append(new MenuItem({
+        label: 'YouTube Skip Ad',
+        click: () => {
+          contents.executeJavaScript(`(function() {
+            document.querySelector('video').currentTime = document.querySelector('video').duration
+          })();`, true)
+        }
+        }))
+
+        ctxMenu.append(new MenuItem({
+          label: 'Clear all popups and ads',
+          click: () => {
+            contents.executeJavaScript(`
+            (function() {
+              /* Ad-B-Gone: Bookmarklet that removes obnoxious ads from pages */
+              var selectors = [ /* By ID: */ '#sidebar-wrap', '#advert', '#xrail', '#middle-article-advert-container', '#sponsored-recommendations', '#around-the-web', '#sponsored-recommendations', '#taboola-content', '#taboola-below-taboola-native-thumbnails', '#inarticle_wrapper_div', '#rc-row-container', '#ads', '#at-share-dock', '#at4-share', '#at4-follow', '#right-ads-rail', 'div#ad-interstitial', 'div#advert-article', 'div#ac-lre-player-ph', /* By Class: */ '.ad', '.avert', '.avert__wrapper', '.middle-banner-ad', '.advertisement', '.GoogleActiveViewClass', '.advert', '.cns-ads-stage', '.teads-inread', '.ad-banner', '.ad-anchored', '.js_shelf_ads', '.ad-slot', '.antenna', '.xrail-content', '.advertisement__leaderboard', '.ad-leaderboard', '.trc_rbox_outer', '.ks-recommended', '.article-da', 'div.sponsored-stories-component', 'div.addthis-smartlayers', 'div.article-adsponsor', 'div.signin-prompt', 'div.article-bumper', 'div.video-placeholder', 'div.top-ad-container', 'div.header-ad', 'div.ad-unit', 'div.demo-block', 'div.OUTBRAIN', 'div.ob-widget', 'div.nwsrm-wrapper', 'div.announcementBar', 'div.partner-resources-block', 'div.arrow-down', 'div.m-ad', 'div.story-interrupt', 'div.taboola-recommended', 'div.ad-cluster-container', 'div.ctx-sidebar', 'div.incognito-modal', '.OUTBRAIN', '.subscribe-button', '.ads9', '.leaderboards', '.GoogleActiveViewElement', '.mpu-container', '.ad-300x600', '.tf-ad-block', '.sidebar-ads-holder-top', '.ads-one', '.FullPageModal__scroller', '.content-ads-holder', '.widget-area', '.social-buttons', '.ac-player-ph']
+              for (let i in selectors) {
+                  let nodesList = document.querySelectorAll(selectors[i]);
+                  for (let i = 0; i < nodesList.length; i++) {
+                      let el = nodesList[i];
+                      if (el && el.parentNode) el.parentNode.removeChild(el);
+                  }
+              }
+          })();
+          `, true)
+          }
+          }))
       win.webContents.on('context-menu', function(e, params) {
         ctxMenu.popup(win, params.x, params.y)
       })
@@ -279,7 +312,7 @@ window.history.forward()
         click: () => {
           const { dialog } = require('electron')
           dialog.showMessageBox({
-            message: 'v1.0.2 DinoBrowse (Node/Electron/Chromium)\n(c) Arjun J'
+            message: 'v1.0.3 DinoBrowse (Node/Electron/Chromium)\n(c) Arjun J'
           })
         }
       }))
@@ -287,6 +320,17 @@ window.history.forward()
         ctxMenu.popup(win, params.x, params.y)
       })
       
+      // Block ads:
+          const { ElectronBlocker } = require('@cliqz/adblocker-electron');
+          const fetch = require('cross-fetch'); // required 'fetch'
+
+          ElectronBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {
+              blocker.enableBlockingInSession(win.webContents.session);
+          });
+      
+      
+
+
     } else {
       console.log('DINOBROWSE: ERROR: URL is not valid');
       win.loadFile('err.html')
