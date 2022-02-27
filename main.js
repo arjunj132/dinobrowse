@@ -1,5 +1,5 @@
 /*
-This holds the source code for DinoBrowse, node browser.
+This holds the main code for DinoBrowse, node browser.
 
 Created with ElectronJS.
 
@@ -34,8 +34,15 @@ SOFTWARE.
 url = process.argv[2];
 hacks = process.argv[3];
 
-const { app, BrowserWindow, Menu, MenuItem, shell } = require('electron')
+const { app, BrowserWindow, Menu, MenuItem, shell, ipcMain } = require('electron')
 const path = require('path')
+
+
+
+ipcMain.handle('url', async function (event, path) {
+  http_check()
+  return url
+})
 
 // Start privacy features:
 const privacy = require('@dothq/electron-privacy');
@@ -90,7 +97,8 @@ function createWindow () {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      enableRemoteModule: true
+      enableRemoteModule: true,
+      webviewTag: true
     }
   })
 
@@ -101,7 +109,7 @@ function createWindow () {
     valid = isValidHttpUrl(url)
     if (valid == true) {
       // app finally loaded with all checks!
-      win.loadURL(url)
+      win.loadFile('index.html')
       // run hacks
       const contents = win.webContents
       contents.executeJavaScript(hacks, true)
@@ -316,10 +324,14 @@ window.history.forward()
           })
         }
       }))
-      win.webContents.on('context-menu', function(e, params) {
-        ctxMenu.popup(win, params.x, params.y)
-      })
-      
+app.on("web-contents-created", (...[/* event */, webContents]) => {
+
+//Webview is being shown here as a window type
+webContents.on("context-menu", (event, click) => {
+  event.preventDefault();
+  ctxMenu.popup(webContents)
+}, false);
+});
       // Block ads:
           const { ElectronBlocker } = require('@cliqz/adblocker-electron');
           const fetch = require('cross-fetch'); // required 'fetch'

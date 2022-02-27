@@ -2,7 +2,7 @@
 
 # DinoBrowse: The Hackable Browser
 
-## v1.0.3
+## v2.0.0
 
 Hi!
 
