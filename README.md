@@ -4,7 +4,9 @@
 
 ## v1.0.3
 
-Hmm... Let's try that! I created a electron-based simple browser with Node. So your life would be much easier. Anyway, lets go ahead and install it!
+Hi!
+
+I created a electron-based simple browser with Node. So your life would be much easier. Anyway, lets go ahead and install it!
 
 Make sure you clone this repo and cd:
 
