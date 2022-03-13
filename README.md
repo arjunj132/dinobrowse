@@ -28,13 +28,12 @@ So now that we installed the dependencies, lets run it! You need python. So, jus
 python3 -m dino
 ```
 
-Type the url, the JS code (optional), and then you are done!
-
+Then type some JS (only if you want to test out something - otherwise leave blank) and click enter and the browser should come to you!
 
 
 ## Usage
 
-You might notice that there is not a address bar! You control stuff via the top bar or the right click menu. 
+You just control stuff like a regular browser!
 
 ## About
 

@@ -72,24 +72,6 @@ function http_check() {
   }}
 }
 
-
-// The isValidHttpUrl function is taken from https://stackoverflow.com/a/43467144/17245189
-function isValidHttpUrl(string) {
-  let url1;
-
-  try {
-    url1 = new URL(string);
-  } catch (_) {
-    return false;
-  }
-
-  if (url.includes('file:///')) {
-    file1 = url;
-    url = raw;
-  }
-  return url1.protocol === "http:" || url1.protocol === "https:" || file1.includes("file:///");
-}
-
 function createWindow () {
   const win = new BrowserWindow({
     width: 800,
@@ -106,8 +88,6 @@ function createWindow () {
   try {
     http_check()
     console.log('Contacting host ' + raw);
-    valid = isValidHttpUrl(url)
-    if (valid == true) {
       // app finally loaded with all checks!
       win.loadFile('index.html')
       // run hacks
@@ -209,14 +189,16 @@ function createWindow () {
       ctxMenu.append(new MenuItem({
         label: 'Inspect',
         click: function() {
-            contents.toggleDevTools()
+          contents.executeJavaScript(`
+          document.getElementById('browser').openDevTools();
+            `, true)
         }
       }))
       ctxMenu.append(new MenuItem({
         label: 'Back',
         click: () => {
           contents.executeJavaScript(`
-window.history.back()
+          document.querySelector('webview').goBack()
             `, true)
         }
       }))
@@ -224,94 +206,26 @@ window.history.back()
         label: 'Forward',
         click: () => {
           contents.executeJavaScript(`
-window.history.forward()
+          document.querySelector('webview').goForward()
             `, true)
         }
       }))
       ctxMenu.append(new MenuItem({
         label: 'Copy',
-        click: () => {
-          contents.executeJavaScript(`
-            function updateClipboard(newClip) {
-              navigator.clipboard.writeText(newClip).then(function() {
-              }, function() {
-                console.error('DinoBrowse: Failed to update clipboard')
-              });
-            }
-
-            updateClipboard(window.getSelection().toString())
-            `)
-        }
+        role: 'copy'
       }))
       ctxMenu.append(new MenuItem({
         label: 'Paste',
-        click: () => {
-          contents.executeJavaScript(`
-            navigator.clipboard.readText().then(clipText =>
-                document.activeElement.value = clipText
-            )
-            `)
-        }
+        role: 'paste'
       }))
       ctxMenu.append(new MenuItem({
         label: 'Reload',
         click: () => {
           contents.executeJavaScript(`
-            window.location.reload();
-            `)
-        }
-      }))
-      ctxMenu.append(new MenuItem({
-        label: 'Change URL',
-        click: () => {
-          const prompt = require('electron-prompt');
-          prompt({
-              title: 'Change URL',
-              label: 'Enter URL to redirect you to here:',
-              value: win.webContents.getURL(),
-              inputAttrs: {
-                  type: 'url'
-              },
-              type: 'input'
-          })
-          .then((r) => {
-              if(r === null) {
-                  console.log('User cancelled operation "Change URL"');
-              } else {
-                  console.log('Process main.js is redirecting to server', r);
-                  win.loadURL(r)
-              }
-          })
-          .catch(console.error);
-        }
-      }))
-      ctxMenu.append(new MenuItem({
-        label: 'YouTube Skip Ad',
-        click: () => {
-          contents.executeJavaScript(`(function() {
-            document.querySelector('video').currentTime = document.querySelector('video').duration
-          })();`, true)
-        }
-        }))
-
-        ctxMenu.append(new MenuItem({
-          label: 'Clear all popups and ads',
-          click: () => {
-            contents.executeJavaScript(`
-            (function() {
-              /* Ad-B-Gone: Bookmarklet that removes obnoxious ads from pages */
-              var selectors = [ /* By ID: */ '#sidebar-wrap', '#advert', '#xrail', '#middle-article-advert-container', '#sponsored-recommendations', '#around-the-web', '#sponsored-recommendations', '#taboola-content', '#taboola-below-taboola-native-thumbnails', '#inarticle_wrapper_div', '#rc-row-container', '#ads', '#at-share-dock', '#at4-share', '#at4-follow', '#right-ads-rail', 'div#ad-interstitial', 'div#advert-article', 'div#ac-lre-player-ph', /* By Class: */ '.ad', '.avert', '.avert__wrapper', '.middle-banner-ad', '.advertisement', '.GoogleActiveViewClass', '.advert', '.cns-ads-stage', '.teads-inread', '.ad-banner', '.ad-anchored', '.js_shelf_ads', '.ad-slot', '.antenna', '.xrail-content', '.advertisement__leaderboard', '.ad-leaderboard', '.trc_rbox_outer', '.ks-recommended', '.article-da', 'div.sponsored-stories-component', 'div.addthis-smartlayers', 'div.article-adsponsor', 'div.signin-prompt', 'div.article-bumper', 'div.video-placeholder', 'div.top-ad-container', 'div.header-ad', 'div.ad-unit', 'div.demo-block', 'div.OUTBRAIN', 'div.ob-widget', 'div.nwsrm-wrapper', 'div.announcementBar', 'div.partner-resources-block', 'div.arrow-down', 'div.m-ad', 'div.story-interrupt', 'div.taboola-recommended', 'div.ad-cluster-container', 'div.ctx-sidebar', 'div.incognito-modal', '.OUTBRAIN', '.subscribe-button', '.ads9', '.leaderboards', '.GoogleActiveViewElement', '.mpu-container', '.ad-300x600', '.tf-ad-block', '.sidebar-ads-holder-top', '.ads-one', '.FullPageModal__scroller', '.content-ads-holder', '.widget-area', '.social-buttons', '.ac-player-ph']
-              for (let i in selectors) {
-                  let nodesList = document.querySelectorAll(selectors[i]);
-                  for (let i = 0; i < nodesList.length; i++) {
-                      let el = nodesList[i];
-                      if (el && el.parentNode) el.parentNode.removeChild(el);
-                  }
-              }
-          })();
+          document.getElementById('browser').reload()
           `, true)
-          }
-          }))
+        }
+      }))
       win.webContents.on('context-menu', function(e, params) {
         ctxMenu.popup(win, params.x, params.y)
       })
@@ -320,33 +234,16 @@ window.history.forward()
         click: () => {
           const { dialog } = require('electron')
           dialog.showMessageBox({
-            message: 'v1.0.3 DinoBrowse (Node/Electron/Chromium)\n(c) Arjun J'
+            message: 'v2.0.0 DinoBrowse (Node/Electron/Chromium)\n(c) Arjun J'
           })
         }
       }))
 app.on("web-contents-created", (...[/* event */, webContents]) => {
-
-//Webview is being shown here as a window type
-webContents.on("context-menu", (event, click) => {
-  event.preventDefault();
-  ctxMenu.popup(webContents)
-}, false);
-});
-      // Block ads:
-          const { ElectronBlocker } = require('@cliqz/adblocker-electron');
-          const fetch = require('cross-fetch'); // required 'fetch'
-
-          ElectronBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {
-              blocker.enableBlockingInSession(win.webContents.session);
-          });
-      
-      
-
-
-    } else {
-      console.log('DINOBROWSE: ERROR: URL is not valid');
-      win.loadFile('err.html')
-    }
+    webContents.on("context-menu", (event, click) => {
+      event.preventDefault();
+      ctxMenu.popup(webContents)
+    }, false);
+})
   } catch (e) {
     console.log('DINOBROWSE: ERROR: ' + e);
     win.loadFile('err.html')
