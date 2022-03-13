@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DinoBrowse</title>
+        <!-- CSS only -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <!-- JavaScript Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css" integrity="sha512-Oy+sz5W86PK0ZIkawrG0iv7XwWhYecM3exvUtMKNJMekGFJtVAhibhRPTpmyTj8+lJCkmWfnpxKgT2OopquBHA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous"></script>
+
+    </head>
+    <body>
+        <!-- Menu: -->
+        <i class="bi bi-arrow-left" style="cursor: pointer;" title="Back" onclick="goBack()"></i>&nbsp;&nbsp;<i class="bi bi-arrow-right"  style="cursor: pointer;" title="Forward" onclick="goForward()">&nbsp;&nbsp;<i class="bi bi-arrow-clockwise" style="cursor: pointer;" title="Reload" onclick="reload()"></i></i>&nbsp;&nbsp;<i class="bi bi-shield-check" id='secure' title="Secure"></i>
+        <!-- Address Bar -->
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="URL" aria-label="URL" aria-describedby="button-addon2" id="url">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="search()"><i class="bi bi-search"></i></button>
+            </div>
+          </div>
+        <webview style="width:100%; height: calc(100% - 75px)" id="browser" onload="restart()"></webview>
+        <script src="renderer.js"></script>
+    </body>
+</html>
