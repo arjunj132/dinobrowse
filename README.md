@@ -9,9 +9,9 @@ Hi!
 I created a electron-based simple browser with Node. So your life would be much easier. Anyway, lets go ahead and install it!
 
 
-Now, it depends what OS your using to install DinoBrowse ([Linux](#linux-appimage), or [Mac + Windows](#all-operating-systems-recommend-for-only-mac--windows)).
+Now, it depends what OS your using to install DinoBrowse ([Linux](#linux), or [Mac + Windows](#all-operating-systems-recommend-for-only-mac--windows)).
 
-#### All Operating Systems (recommend for only mac + windows)
+### All Operating Systems (recommend for only mac + windows)
 Make sure you clone this repo and cd:
 
 ```bash
@@ -36,24 +36,22 @@ python3 -m dino
 
 Then type some JS (only if you want to test out something - otherwise leave blank) and click enter and the browser should come to you!
 
-#### Linux (AppImage)
+### Linux
 
-Linux has an easy way - and way faster.
+Linux has easy ways - and way faster.
 
-Download our AppImage at the Assets part on the release. NOTE: The release must be over 2.0.0 - otherwise, you won't find the image.
+Download our AppImage, DEB, or RPM at the Assets part on the release. NOTE: The release must be over 2.0.0 - otherwise, you won't find the file.
 
-Then run this:
+Now run the file. Note that only command-line work on the current version.
+Running the file is easy:
 
-```bash
-# Certified to work on Debian and Ubuntu
-chmod +x dinobrowse.AppImage
-./dinobrowse.AppImage run https://google.com
-```
+AppImage: `chmod +x dinobrowse.AppImage; ./dinobrowse.AppImage run https://google.com` (includes permissions)
 
-That basically adds permission to run and runs the app
+Debian & RPM: `dinobrowse`
+
 ## Usage
 
-You just control stuff like a regular browser! Address bar, all look familiar.
+You just control stuff like a regular browser! Address bar, navigation, all looks familiar.
 
 ## About
 
