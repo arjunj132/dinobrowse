@@ -19,12 +19,14 @@
         <!-- Menu: -->
         <i class="bi bi-arrow-left" style="cursor: pointer;" title="Back" onclick="goBack()"></i>&nbsp;&nbsp;<i class="bi bi-arrow-right"  style="cursor: pointer;" title="Forward" onclick="goForward()">&nbsp;&nbsp;<i class="bi bi-arrow-clockwise" style="cursor: pointer;" title="Reload" onclick="reload()"></i></i>&nbsp;&nbsp;<i class="bi bi-shield-check" id='secure' title="Secure"></i>
         <!-- Address Bar -->
+        <form action="javascript:search()">
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="URL" aria-label="URL" aria-describedby="button-addon2" id="url">
             <div class="input-group-append">
-              <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="search()"><i class="bi bi-search"></i></button>
+              <button class="btn btn-outline-secondary" type="button" id="button-addon2" type="submit"><i class="bi bi-search"></i></button>
             </div>
           </div>
+        </form>
         <webview style="width:100%; height: calc(100% - 75px)" id="browser" onload="restart()"></webview>
         <script src="renderer.js"></script>
     </body>

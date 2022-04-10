@@ -234,7 +234,7 @@ function createWindow () {
         click: () => {
           const { dialog } = require('electron')
           dialog.showMessageBox({
-            message: 'v2.0.0 DinoBrowse (Node/Electron/Chromium)\n(c) Arjun J'
+            message: 'v2.0.1 DinoBrowse (Node/Electron/Chromium)\n(c) Arjun J'
           })
         }
       }))
