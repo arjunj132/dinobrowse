@@ -40,14 +40,14 @@ Then type some JS (only if you want to test out something - otherwise leave blan
 
 Linux has easy ways - and way faster.
 
-Download our AppImage, DEB, or RPM at the Assets part on the release. NOTE: The release must be over 2.0.0 - otherwise, you won't find the file.
+Download our AppImage, DEB, or RPM at the Assets part on the release. NOTE: The release must be over 2.0.0 - otherwise, you won't find the file. You can not use the icon in the taskbar.
 
 Now run the file.
 Running the file is easy:
 
 AppImage: `chmod +x dinobrowse.AppImage; ./dinobrowse.AppImage run https://google.com` (includes permissions)
 
-Debian & RPM: `dinobrowse` (or click the icon in the taskbar)
+Debian & RPM: `dinobrowse run https://google.com`
 
 ## Usage
 
