@@ -2,7 +2,7 @@
 
 # DinoBrowse: The Hackable Browser
 
-## v2.0.1
+## v2
 
 Hi!
 
@@ -42,12 +42,12 @@ Linux has easy ways - and way faster.
 
 Download our AppImage, DEB, or RPM at the Assets part on the release. NOTE: The release must be over 2.0.0 - otherwise, you won't find the file.
 
-Now run the file. Note that only command-line work on the current version.
+Now run the file.
 Running the file is easy:
 
 AppImage: `chmod +x dinobrowse.AppImage; ./dinobrowse.AppImage run https://google.com` (includes permissions)
 
-Debian & RPM: `dinobrowse`
+Debian & RPM: `dinobrowse` (or click the icon in the taskbar)
 
 ## Usage
 

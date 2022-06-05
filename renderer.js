@@ -39,6 +39,9 @@ const axios = require('axios');
 
 // Open url in page webview
 var url_find = ipcRenderer.invoke('url').then((result) => {
+    if (result == "") {
+        result = "https://google.com"
+    }
     webview.src = result;
 })
 
