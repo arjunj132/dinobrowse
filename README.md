@@ -2,11 +2,15 @@
 
 # DinoBrowse: The Hackable Browser
 
-## v2
+Please choose the version of DinoBrowse:
+1. DinoBrowse <b>Pro</b> (reccomended - original version)
+2. DinoBrowse <i>Lite</i> (only for super low storage)
+
+## DinoBrowse <b>Pro</b>
 
 Hi!
 
-I created a electron-based simple browser with Node. So your life would be much easier. Anyway, lets go ahead and install it!
+I created a electron-based simple browser with Node.Anyway, lets go ahead and install it!
 
 
 Now, it depends what OS your using to install DinoBrowse ([Linux](#linux), or [Mac + Windows](#all-operating-systems-recommend-for-only-mac--windows)).
@@ -49,15 +53,28 @@ AppImage: `chmod +x dinobrowse.AppImage; ./dinobrowse.AppImage run https://googl
 
 Debian & RPM: `dinobrowse run https://google.com`
 
-## Usage
+### Usage
 
 You just control stuff like a regular browser! Address bar, navigation, all looks familiar.
 
-## About
+### About
 
 This is a modified version of Chromium. But it is pretty nice for people who don't wont to install chrome for some reason.
 
 Security features are being worked on - migration to v2 deleted them.
+
+
+
+
+
+## DinoBrowse <i>Lite</i>
+
+Download the very low storage and simple browsers. THIS IS NOT RECCOMENDED BECAUSE OF THE UNSECURITY AND THE UNEASINESS. Download the folder `lite` and run `dinolite.py`
+
+All JavaScript is blocked.
+Simple.
+Lightning fast.
+Only 13.03 MB.
 
 ---
 
