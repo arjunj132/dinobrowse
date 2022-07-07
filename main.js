@@ -36,6 +36,8 @@ hacks = process.argv[3];
 
 const { app, BrowserWindow, Menu, MenuItem, shell, ipcMain } = require('electron')
 const path = require('path')
+let spawn = require("child_process").spawn;
+
 
 
 
@@ -169,6 +171,25 @@ function createWindow () {
           submenu: [
             { role: 'minimize' },
             { role: 'zoom' },
+            {
+              label: 'New Window',
+              accelerator: process.platform === 'darwin' ? 'Cmd+T' : 'Ctrl+T',
+              click: () => {
+                const { spawn } = require('child_process');
+                const child = spawn('npm', ['start', 'https://google.com']);
+
+                // use child.stdout.setEncoding('utf8'); if you want text chunks
+                child.stdout.on('data', (chunk) => {
+                  child.stdout.setEncoding('utf8');
+                  console.log(chunk)
+                });
+
+                child.on('close', (code) => {
+                  console.log(`child process exited with code ${code}`);
+                });
+
+              }
+            },
             ...(isMac ? [
               { type: 'separator' },
               { role: 'front' },
