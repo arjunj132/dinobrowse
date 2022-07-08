@@ -1,6 +1,6 @@
 {
   "name": "dinobrowse",
-  "version": "2.0.2",
+  "version": "2.1.1",
   "description": "A browser made of Node and Python",
   "main": "main.js",
   "scripts": {
@@ -25,7 +25,8 @@
   "dependencies": {
     "@dothq/electron-privacy": "^2.2.0",
     "axios": "^0.27.2",
-    "cross-fetch": "^3.1.5"
+    "cross-fetch": "^3.1.5",
+    "got": ">=11.8.5"
   },
   "build": {
     "appId": "com.arjun.dinobrowse",
