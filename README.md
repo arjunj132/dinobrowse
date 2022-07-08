@@ -10,7 +10,7 @@ Please choose the version of DinoBrowse:
 
 Hi!
 
-I created a electron-based simple browser with Node.Anyway, lets go ahead and install it!
+I created a electron-based simple browser with Node. Anyway, lets go ahead and install it!
 
 
 Now, it depends what OS your using to install DinoBrowse ([Linux](#linux), or [Mac + Windows](#all-operating-systems-recommend-for-only-mac--windows)).
