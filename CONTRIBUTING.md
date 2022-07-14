@@ -21,3 +21,7 @@ Any dangerous, harmful, useless, or anything not meeting our standards will be d
 
 ## Clause 5: Standards
 We want contributions that are (1) Easy to use, (2) Elegant, (3) Useful, (4) Helpful, and (5) Safe
+
+## Clause 6: Understand
+
+We personally recommend you to read the [Understanding how it works for contributors](https://github.com/arjunj132/dinobrowse/wiki/Understanding-how-it-works-for-contributors) in our wiki. But you need to understand the basic concept behind our code.
